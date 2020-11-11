@@ -1,5 +1,5 @@
 import pytest
-from lowest_common_ancestor import findLCA, Node
+from lowest_common_ancestor import *
 
 class Test_LCA:
 
