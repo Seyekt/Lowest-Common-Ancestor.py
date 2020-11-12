@@ -4,6 +4,15 @@ class Node:
 		self.right = None
 		self.left = None
 
+class DAGNode:
+	def __init__(self, key):
+		self.key = key
+		self.parents = []
+		self.children = []
+		self.distance = None
+
+
+
 def findPath( root, path, k): 
 
 	if root is None:
@@ -47,3 +56,47 @@ root.right.right = Node(7)
 #print("LCA(4, 6) = %d" %(findLCA(root, 4, 6))) 
 #print("LCA(3, 4) = %d" %(findLCA(root, 3, 4))) 
 #print("LCA(2, 4) = %d" %(findLCA(root, 2, 4))) 
+
+def findAncestors(root, ancestors, distance):
+
+	if root is None:
+		return
+
+	for i in range(len(root.parents)):
+		root.parents[i].distance = distance
+		ancestors.append(root.parents[i])
+		findAncestors(root.parents[i], ancestors, distance + 1)
+	
+
+def findDAGLCA(root, n1, n2): 
+
+	if root is None:
+		return -1
+
+	n1Ancestors = []
+	n2Ancestors = []
+
+	findAncestors(n1, n1Ancestors, 1)
+	findAncestors(n2, n2Ancestors, 1)
+
+	commonAncestors = []
+
+	for i in range(len(n1Ancestors)):
+		print("Key:", n1Ancestors[i].key)
+		print("Distance:", n1Ancestors[i].distance)
+		for j in range(len(n2Ancestors)):
+			if (n1Ancestors[i].key == n2Ancestors[j].key):
+				commonAncestors.append(n1Ancestors[i])
+	
+	lowestCommonAncestor = commonAncestors[0]
+
+	print("Common Ancestors:")
+
+	for i in range(len(commonAncestors)):
+		print(commonAncestors[i].key)
+		if (lowestCommonAncestor.distance > commonAncestors[i].distance):
+			lowestCommonAncestor = commonAncestors[i]
+	
+	print(lowestCommonAncestor.key)
+
+	return lowestCommonAncestor.key
